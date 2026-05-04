@@ -19,8 +19,9 @@ cd RENTO
 ```
 
 ### 2️⃣ Database Setup (MySQL)
+
+**Step 1:** Start MySQL and create database
 ```bash
-# Start MySQL and run:
 mysql -u root -p
 
 # In MySQL console:
@@ -28,16 +29,16 @@ CREATE DATABASE rento_db;
 EXIT;
 ```
 
-### 3️⃣ Configure Backend
+**Important:** Do NOT create tables manually - Flyway migrations handle this automatically!
 
-**File:** `rento-backend/src/main/resources/application.properties`
-
-**Change these values:**
+**Step 2:** Update database credentials in `rento-backend/src/main/resources/application.properties`:
 ```properties
 spring.datasource.url=jdbc:mysql://localhost:3306/rento_db
-spring.datasource.username=root              # ← Your MySQL username
-spring.datasource.password=your_password     # ← Your MySQL password
+spring.datasource.username=root
+spring.datasource.password=your_password
 ```
+
+📚 **For detailed database setup info, see:** `rento-backend/DATABASE_SETUP.md`
 
 ### 4️⃣ Configure Frontend (Optional)
 

@@ -62,16 +62,16 @@ cd RENTO
    ```sql
    CREATE DATABASE rento_db;
    ```
+   **Note:** Do NOT create tables manually. Flyway migrations will do this automatically.
 
 3. Update database credentials in `rento-backend/src/main/resources/application.properties`:
    ```properties
    spring.datasource.url=jdbc:mysql://localhost:3306/rento_db
    spring.datasource.username=root
    spring.datasource.password=your_password
-   spring.jpa.hibernate.ddl-auto=update
-   spring.jpa.show-sql=false
-   spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL8Dialect
    ```
+
+   👉 **See [DATABASE_SETUP.md](rento-backend/DATABASE_SETUP.md) for detailed database configuration and Flyway migrations information.**
 
 #### Step 2: Build and Run
 

@@ -16,7 +16,7 @@ RENTO is a room rental platform that connects room owners with renters. The plat
 Before you begin, ensure you have the following installed:
 
 ### For Backend (Spring Boot)
-- **Java JDK 11 or higher** - [Download](https://www.oracle.com/java/technologies/downloads/)
+- **Java JDK 17 or higher** - [Download](https://www.oracle.com/java/technologies/downloads/)
 - **Maven 3.6+** - [Download](https://maven.apache.org/download.cgi)
 
 ### For Frontend (React + Vite)

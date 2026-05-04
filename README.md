@@ -17,14 +17,16 @@ Before you begin, ensure you have the following installed:
 
 ### For Backend (Spring Boot)
 - **Java JDK 17 or higher** - [Download](https://www.oracle.com/java/technologies/downloads/)
-- **Maven 3.6+** - [Download](https://maven.apache.org/download.cgi)
+- **Maven 3.6+** - [Download](https://maven.apache.org/download.cgi) *or use Maven wrapper (mvnw)*
 
 ### For Frontend (React + Vite)
 - **Node.js 16+** - [Download](https://nodejs.org/)
 - **npm 8+** (comes with Node.js)
 
 ### Database
-- **MySQL 8.0+** - [Download](https://dev.mysql.com/downloads/mysql/)
+- **None needed!** 🎉 The project uses **H2 in-memory database** for local development
+  - No MySQL installation required
+  - Sample data auto-loaded on startup
 
 ## Project Structure
 
@@ -55,23 +57,20 @@ cd RENTO
 
 ### 2. Backend Setup
 
-#### Step 1: Configure Database
+#### Step 1: No Database Configuration Needed! 🎉
 
-1. Start MySQL server
-2. Create a new database:
-   ```sql
-   CREATE DATABASE rento_db;
-   ```
-   **Note:** Do NOT create tables manually. Flyway migrations will do this automatically.
+The project uses **H2 in-memory database** which:
+- ✅ Requires no installation
+- ✅ Creates tables automatically
+- ✅ Loads sample data automatically
 
-3. Update database credentials in `rento-backend/src/main/resources/application.properties`:
-   ```properties
-   spring.datasource.url=jdbc:mysql://localhost:3306/rento_db
-   spring.datasource.username=root
-   spring.datasource.password=your_password
-   ```
-
-   👉 **See [DATABASE_SETUP.md](rento-backend/DATABASE_SETUP.md) for detailed database configuration and Flyway migrations information.**
+Check `rento-backend/src/main/resources/application.properties` - it's already configured:
+```properties
+# H2 In-Memory Database (auto-configured)
+spring.datasource.url=jdbc:h2:mem:rento_db
+spring.jpa.database-platform=org.hibernate.dialect.H2Dialect
+spring.jpa.hibernate.ddl-auto=create-drop
+```
 
 #### Step 2: Build and Run
 
@@ -87,6 +86,11 @@ cd rento-backend
 
 The backend will start on **http://localhost:8080**
 
+#### Optional: Access H2 Console
+- **URL:** http://localhost:8080/h2-console
+- **Username:** sa
+- **Password:** (leave blank)
+
 ### 3. Frontend Setup
 
 #### Step 1: Install Dependencies
@@ -96,11 +100,18 @@ cd rento-frontend
 npm install
 ```
 
-#### Step 2: Configure Environment (Optional)
+#### Step 2: Environment Configuration
 
-Create a `.env.local` file in `rento-frontend/` if needed:
+The `.env` file is already configured with Cloudinary credentials:
 ```
-VITE_API_BASE_URL=http://localhost:8080/api
+VITE_CLOUDINARY_CLOUD_NAME=dhqldyxqx
+VITE_CLOUDINARY_UPLOAD_PRESET=RentHub
+VITE_API_BASE_URL=http://localhost:8080
+```
+
+**For production**, update `VITE_API_BASE_URL` to your backend domain:
+```
+VITE_API_BASE_URL=https://your-backend-domain.com
 ```
 
 #### Step 3: Run Development Server
@@ -115,31 +126,32 @@ The frontend will typically start on **http://localhost:5173**
 
 ## 📋 Quick Configuration Checklist
 
-After cloning, before running the apps, complete this checklist:
+After cloning, you're ready to go! No additional setup needed!
 
-### ✅ Database Setup
-- [ ] MySQL server is running
-- [ ] Database `rento_db` is created
-- [ ] Note your MySQL username and password
+### ✅ Backend Ready
+- [x] H2 database auto-configured
+- [x] Tables created automatically
+- [x] Sample data loaded automatically
 
-### ✅ Backend Configuration (`rento-backend/src/main/resources/application.properties`)
-Update these values:
-```properties
-# Database Connection
-spring.datasource.url=jdbc:mysql://localhost:3306/rento_db
-spring.datasource.username=root                              # Change if your MySQL user is different
-spring.datasource.password=your_actual_password              # Change to your MySQL password
+### ✅ Frontend Ready
+- [ ] Run `npm install` to install dependencies
+- [x] Cloudinary credentials already configured
+- [x] API base URL already configured
+
+### ✅ Sample Data Included
 ```
+Test Users:
+- Owner: owner@rento.com / password: admin123
+- Renter: renter@rento.com / password: admin123
 
-### ✅ Frontend Configuration (Optional but Recommended)
-Create file: `rento-frontend/.env.local`
-```properties
-VITE_API_BASE_URL=http://localhost:8080/api
+Sample Room:
+- 2BHK Modern Apartment with Cloudinary images
+- Complete booking and chat history
 ```
 
 ### ✅ Install Dependencies
 ```bash
-# Backend - uses Maven wrapper (no installation needed)
+# Backend - uses Maven wrapper (automatic)
 # Frontend - install npm dependencies
 cd rento-frontend
 npm install
@@ -215,17 +227,23 @@ Once both are running:
 
 ### Backend Issues
 - **Port 8080 in use**: Change `server.port` in `application.properties`
-- **Database connection failed**: Verify MySQL is running and credentials are correct
+- **H2 console not accessible**: Ensure `spring.h2.console.enabled=true` in `application.properties`
 - **Maven build fails**: Run `./mvnw clean` to clear cache
+- **Sample data not loading**: Ensure `/src/main/resources/data.sql` exists
 
 ### Frontend Issues
 - **Dependencies not installing**: Try `npm cache clean --force` then `npm install`
-- **CORS errors**: Ensure backend is running on the correct port
+- **CORS errors**: Ensure backend is running on the correct port and `VITE_API_BASE_URL` is correct
 - **Port 5173 in use**: Vite will automatically use the next available port
+- **Cloudinary images not working**: Check `VITE_CLOUDINARY_CLOUD_NAME` and `VITE_CLOUDINARY_UPLOAD_PRESET` in `.env`
 
 ### Database Issues
-- **Migration errors**: Check `rento-backend/src/main/resources/db/migration/` for SQL scripts
-- **Tables not created**: Ensure `spring.jpa.hibernate.ddl-auto=update` is set
+- **H2 database reset on restart**: This is normal - H2 in-memory database resets when the app stops
+- **For persistent database**: Use H2 in file mode by changing:
+  ```properties
+  spring.datasource.url=jdbc:h2:file:~/rento_db
+  ```
+- **H2 file location**: By default stored in user home directory
 
 ## Development Workflow
 

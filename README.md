@@ -111,7 +111,57 @@ npm run dev
 
 The frontend will typically start on **http://localhost:5173**
 
-## Running Both Applications
+---
+
+## 📋 Quick Configuration Checklist
+
+After cloning, before running the apps, complete this checklist:
+
+### ✅ Database Setup
+- [ ] MySQL server is running
+- [ ] Database `rento_db` is created
+- [ ] Note your MySQL username and password
+
+### ✅ Backend Configuration (`rento-backend/src/main/resources/application.properties`)
+Update these values:
+```properties
+# Database Connection
+spring.datasource.url=jdbc:mysql://localhost:3306/rento_db
+spring.datasource.username=root                              # Change if your MySQL user is different
+spring.datasource.password=your_actual_password              # Change to your MySQL password
+```
+
+### ✅ Frontend Configuration (Optional but Recommended)
+Create file: `rento-frontend/.env.local`
+```properties
+VITE_API_BASE_URL=http://localhost:8080/api
+```
+
+### ✅ Install Dependencies
+```bash
+# Backend - uses Maven wrapper (no installation needed)
+# Frontend - install npm dependencies
+cd rento-frontend
+npm install
+```
+
+### ✅ Build for Development vs Production
+**For LOCAL DEVELOPMENT:**
+```bash
+cd rento-frontend
+npm run dev          # Runs Vite dev server with hot reload
+```
+
+**For PRODUCTION BUILD:**
+```bash
+cd rento-frontend
+npm run build        # Creates optimized files in dist/ folder
+npm run preview      # Preview the production build locally
+```
+
+---
+
+## 🚀 Running Both Applications
 
 ### Terminal 1 - Backend
 ```bash
